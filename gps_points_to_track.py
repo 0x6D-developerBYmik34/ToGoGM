@@ -1,0 +1,35 @@
+import geojson
+import geopandas as gpd
+from mapbox import Directions
+from shapely.geometry import LineString
+
+
+def gps_point_to_routes(points_from_file: str, dump_to='routes.geojson'):
+    get_direct = Directions(access_token="pk.eyJ1IjoibWlrMzQiLCJhIjoiY2tpeXd3d3JuMjY1MTMybW1mOWYwYTZ2dyJ9"
+                                         ".yo2D39vZl9GUoy6F4mRGqw")
+
+    with open(points_from_file, 'r') as cat:
+        data = geojson.load(cat).copy()
+
+    end_points = data['features']
+
+    if len(end_points) <= 25:
+        resp = get_direct.directions(walkway_bias=1,
+                                     profile='mapbox/walking',
+                                     features=end_points,
+                                     geometries='geojson')
+        print(resp.status_code)
+        print(resp.url)
+
+        new_data = resp.json()
+        geom = new_data['routes'][-1]['geometry']
+        line = LineString(geom['coordinates'])
+
+        route_df = gpd.GeoDataFrame(geometry=[line])
+        route_df.to_file(dump_to, driver='GeoJSON', encoding="utf-8")
+    else:
+        print('many points in data')
+
+
+if __name__ == '__main__':
+    gps_point_to_routes('points.geojson')
