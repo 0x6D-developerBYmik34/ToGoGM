@@ -3,10 +3,11 @@ import geopandas as gpd
 from mapbox import Directions
 from shapely.geometry import LineString
 
+from token import TOKEN
+
 
 def gps_point_to_routes(points_from_file: str, dump_to='routes.geojson'):
-    get_direct = Directions(access_token="pk.eyJ1IjoibWlrMzQiLCJhIjoiY2tpeXd3d3JuMjY1MTMybW1mOWYwYTZ2dyJ9"
-                                         ".yo2D39vZl9GUoy6F4mRGqw")
+    get_direct = Directions(access_token=TOKEN)
 
     with open(points_from_file, 'r') as cat:
         data = geojson.load(cat).copy()
