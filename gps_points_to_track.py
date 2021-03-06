@@ -3,10 +3,10 @@ import geopandas as gpd
 from mapbox import Directions
 from shapely.geometry import LineString
 
-from token import TOKEN
+from access_token import TOKEN
 
 
-def gps_point_to_routes(points_from_file: str, dump_to='routes.geojson'):
+def gps_point_to_routes(points_from_file='points.geojson', dump_to='routes.geojson'):
     get_direct = Directions(access_token=TOKEN)
 
     with open(points_from_file, 'r') as cat:
@@ -28,8 +28,10 @@ def gps_point_to_routes(points_from_file: str, dump_to='routes.geojson'):
 
         route_df = gpd.GeoDataFrame(geometry=[line])
         route_df.to_file(dump_to, driver='GeoJSON', encoding="utf-8")
+
+        return route_df.to_json()
     else:
-        print('many points in data')
+        return {'error': 'many points in data'}
 
 
 if __name__ == '__main__':
