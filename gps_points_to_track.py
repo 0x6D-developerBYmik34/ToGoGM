@@ -3,7 +3,7 @@ import geopandas as gpd
 from mapbox import Directions
 from shapely.geometry import LineString
 
-from token import TOKEN
+from access_token import TOKEN
 
 
 def gps_point_to_routes(points_from_file: str, dump_to='routes.geojson'):
