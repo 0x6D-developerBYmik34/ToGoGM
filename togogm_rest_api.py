@@ -1,5 +1,6 @@
 from flask import Flask
-from flask import request, make_response
+from flask import request, make_response, json
+import geojson
 
 from gps_points_to_track import gps_point_to_routes
 from gps_track_of_img import img_to_points
@@ -25,7 +26,7 @@ def get_markers_of_img(name_image_file='1g.jpg'):
 
     data = gps_point_to_routes()
 
-    resp = make_response(data)
+    resp = make_response(geojson.dumps(data))
 
     resp.headers['Content-Type'] = "application/json; charset=utf-8"
 

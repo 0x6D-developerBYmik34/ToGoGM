@@ -29,7 +29,7 @@ def gps_point_to_routes(points_from_file='points.geojson', dump_to='routes.geojs
         route_df = gpd.GeoDataFrame(geometry=[line])
         route_df.to_file(dump_to, driver='GeoJSON', encoding="utf-8")
 
-        return route_df.to_json()
+        return route_df.to_dict()
     else:
         return {'error': 'many points in data'}
 
